@@ -1,10 +1,10 @@
 io.socket.get('/users/'+urlName+'/suscribe', function (data) {
-      console.log("I just suscribed.");
 
       model = data;
-      if(model.hasStarted){
+      if(model.start){
            $( ".start" ).trigger( "click" ); 
       }
+
 });  
 
 io.socket.on('users', function (socketEvent){
@@ -13,28 +13,40 @@ io.socket.on('users', function (socketEvent){
       console.log(socketEvent);
 
       if(socketEvent.verb == "created")
-        console.log("created");
+          console.log("created");
       else{ 
         
-        if( socketEvent.data.upTo || socketEvent.data.fromT )
-              model.fromT = socketEvent.data.fromT,
-              model.upTo =  socketEvent.data.upTo;
-
-        model.hasStarted = socketEvent.data.hasStarted;      
-        model.pause = socketEvent.data.pause;
-        model.reset = socketEvent.data.reset;
+        if (socketEvent.data.start !== undefined)
+            model.start = socketEvent.data.start;      
         
-        if( model.reset )
-          $( ".reset" ).trigger( "click" );
-        else if( model.hasStarted == false )
+        if( socketEvent.data.fromT !== undefined)
+            model.fromT = socketEvent.data.fromT;
+
+        if( socketEvent.data.upTo  !== undefined )
+            model.upTo =  socketEvent.data.upTo;
+
+        if(socketEvent.data.pause !== undefined)
+            model.pause = socketEvent.data.pause;
+        
+        if(socketEvent.data.reset !== undefined)
+            model.reset = socketEvent.data.reset;
+
+        
+        if( model.start == false )
           $( ".stop" ).trigger( "click" );
-        else if(model.hasStarted || !model.pause){
-            if(model.pause == false && model.hasStarted == undefined) model.wat = true;
-          $( ".start" ).trigger( "click" );
-        }
+
+        else if( model.reset )
+          $( ".reset" ).trigger( "click" );
+        
         else if( model.pause )
           clearInterval(model.interv);
         
+        else if(model.start || !model.pause){
+        
+            if(model.pause == false && socketEvent.data.start === undefined) model.wat = true;
+         
+            $( ".start" ).trigger( "click" );
+        }
       }
 
   });

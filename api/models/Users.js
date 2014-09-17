@@ -12,7 +12,7 @@ module.exports = {
 				type: 'string'
 		},
 		
-		hasStarted: {
+		start: {
 				type: 'boolean',
 				defaultsTo: false
 		},
@@ -35,7 +35,8 @@ module.exports = {
 		fromT: {
 				type: 'integer',
 				defaultsTo: 0
-		}
+		} 
+
 	}
 
 };

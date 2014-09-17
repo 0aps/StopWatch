@@ -1,7 +1,8 @@
-var startValue = 120000, //Number of milliseconds
+var startValue = 120000, 
     time = new Date(0),
     total,
-    upto;
+    fromT,
+    upTo;
 
 function done(){
     alert("Timer reached 00:00!");
@@ -12,62 +13,66 @@ $(function(){
     displayTime();
     $(".start").on("click", function(){
 
+        if( model.start === false){
 
-        if(model.hasStarted === false){
+            fromT = new Date() - 0;
+            total = ( fromT + startValue );
+            upTo  = new Date(total);
 
-            from = new Date() - 0;
-            total = ( from + startValue );
-            upto = new Date(total);
-
-            io.socket.put('/users/'+urlName+'/started', 
-            {hasStarted: true, timeS : from, timeU : total}, 
-                function (data) {
-                    model.hasStarted = true;
-                    model.upTo = upto;
-                    model.fromT = from;
+            io.socket.put('/users/'+urlName+'/start', 
+                { start: true, fromT : fromT, upTo : total }, 
+                    function (data) {
+                        model.start = true;
+                        model.upTo = data[0].upTo;
+                        model.fromT = data[0].fromT;
             });
+         
          }
-         else if( model.pause == true && model.hasStarted){
-            io.socket.put('/users/'+urlName+'/started', 
-                {pause : false}, 
-                     function (data) {
-                       model.pause = false;
-                });    
-            //time = new Date() - from; 
-            //from += time;
-  
+         else if( model.pause == true ){
+
+            io.socket.put('/users/'+urlName+'/pause', 
+                { pause : false }, 
+                    function (data){
+                       model.pause = data[0].pause;
+                       fromT = model.fromT;
+            });    
+
         }
         else{
 
-             from = model.fromT;
-             upto = model.upTo;
+             fromT = model.fromT;
+             upTo  = model.upTo;
              
-             if (model.wat == undefined){
-               time = new Date() - from; 
-               from += time; 
+             if (model.wat === undefined){
+               time = new Date() - fromT; 
+               fromT += time; 
              } 
         }
 
-        //console.log((upto-from)/1000)
         model.interv = setInterval(function() {
+        
             time = new Date( (time - 0) + 1000 );
-            from = from + 1000;
-            if( (upto-from)/1000 <= 0 ){
+            fromT = fromT + 1000;
+        
+            if( (upTo-fromT)/1000 <= 0 ){
+
                 done();
                 clearInterval(model.interv);
             }
+        
             displayTime();
+         
          }, 1000);
           
     });
 
     $(".stop").on("click", function(){
         
-        if(model.hasStarted)
-            io.socket.put('/users/'+urlName+'/started', 
-                {hasStarted : false}, 
+        if(model.start)
+            io.socket.put('/users/'+urlName+'/start', 
+                {start : false}, 
                      function (data) {
-                        model.hasStarted = false;
+                        model.start = false;
                 });
     
         clearInterval(model.interv);
@@ -79,22 +84,25 @@ $(function(){
     $(".pause").on("click", function(){
     
         if( model.pause == false)
-            io.socket.put('/users/'+urlName+'/started', 
-                {pause : true, timeS: (new Date - 0), timeU: total}, 
+            io.socket.put('/users/'+urlName+'/pause', 
+                {pause : true, fromT: (new Date - 0), upTo: total}, 
                      function (data) {
                         model.pause = true;
-                        from = data[0].fromT;
+                        model.fromT = data[0].fromT;
                 });
-        clearInterval(model.interv);        
 
+        clearInterval(model.interv);        
     });
     
     $(".reset").on("click", function(){
         if ( model.reset == false)
-            io.socket.put('/users/'+urlName+'/started', 
+            io.socket.put('/users/'+urlName+'/reset', 
                     {reset : true}, 
                          function (data) {
+                        model.reset = data[0].reset;
                     });
+        else
+            model.reset = false;
         
         time = new Date(0);
         displayTime();
@@ -102,11 +110,14 @@ $(function(){
 });
 
 function displayTime(){
+
     $(".time").text(fillZeroes(time.getMinutes()) + ":" + fillZeroes(time.getSeconds()));
 }
 
 function fillZeroes(t){
+    
     t = t+"";
+    
     if(t.length==1)
         return "0" + t;
     else
@@ -114,6 +125,7 @@ function fillZeroes(t){
 }
 
 function generate(){
+    
     $.post( "genURL", function( data ) {
        $( "input" ).val( data ); });
 }

@@ -44,10 +44,18 @@ module.exports.routes = {
     controller: "users", action: "suscribe"
   },
 
- 'PUT /users/:name/started': {
-    controller: "users", action: "started"
+ 'PUT /users/:name/start': {
+    controller: "users", action: "start"
   },
 
+  'PUT /users/:name/pause': {
+    controller: "users", action: "pause"
+  },
+  
+  'PUT /users/:name/reset': {
+    controller: "users", action: "reset"
+  },
+  
   'GET /users/:name': {
     controller: "users", action: "stopWatch"
   }
