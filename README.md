@@ -1,3 +1,3 @@
-# demo
+StopWatch
 
-a [Sails](http://sailsjs.org) application
+Live and Iteractive StopWatch using SailsJs
