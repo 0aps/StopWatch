@@ -127,5 +127,6 @@ function fillZeroes(t){
 function generate(){
     
     $.post( "genURL", function( data ) {
-       $( "input" ).val( data ); });
+       $( "input" ).val( data ); 
+   });
 }

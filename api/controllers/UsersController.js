@@ -118,19 +118,48 @@ module.exports = {
   	},
 
 	'genURL': function(req, res, next) {
-
-	   var ord = Math.floor((Math.random() * 1000000) + 1),
-	   	   foo = ""+ ord.toString();
-	
-		Users.create( {name: foo}).exec(function created(err,idx){
+		String.prototype.replaceAt = function(index, character) {
+    		return this.substr(0, index) + character + this.substr(index+character.length);
+		}
+		Url.getURL(function(err, codes) {
+			if(codes.length == 0) Url.create({code: "aaaaaa"}).exec(function(err, idx) {
+				Users.create( {name: "aaaaaa"}).exec(function created(err,idx){
 	   		
-	   	  if(err) return next(err);
+	   	  			if(err) return next(err);
 
-	      res.status(201);
+	      			res.status(201);
       
-	      return res.ok( "localhost:1337/users/"+foo );
+	      			return res.ok( "localhost:1337/users/aaaaaa");
+				});
+			});
+			else {
+				var url = (function(){
+					var dicc = "abcdefghijkmnlopqrstuvwxyzABCDEFGHIJKMNLOPQRSTUVWXYZ0123456789",
+					url_test = codes[0].code;
+					for (var i = url_test.length - 1; i >= 0; i--) {
+						if(url_test[i] == dicc[dicc.length-1]){
+							url_test = url_test.replaceAt(i, dicc[0]);
+						}else{
+							url_test = url_test.replaceAt(i, dicc[dicc.indexOf(url_test[i])+1]);
+							console.log("New url: " + url_test);
+							break;
+						}
+					}
+					return url_test;
+				})();
+				Url.create({code: url}).exec(function(err, idx) {
+					Users.create( {name: url}).exec(function created(err,idx){
+	   		
+	   	  				if(err) return next(err);
 
-	   });
+	      				res.status(201);
+      
+	      				return res.ok( "localhost:1337/users/"+url);
+
+					});
+				});
+			}
+		});
 	}
 	
 };
