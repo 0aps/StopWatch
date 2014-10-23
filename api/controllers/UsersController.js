@@ -91,7 +91,7 @@ module.exports = {
 				    return res.ok(idx);	
 			});
   		});
-  	},
+  	}, 
 
   	'reset' : function(req, res, next){
   		
@@ -118,11 +118,15 @@ module.exports = {
   	},
 
 	'genURL': function(req, res, next) {
+
 		String.prototype.replaceAt = function(index, character) {
+
     		return this.substr(0, index) + character + this.substr(index+character.length);
 		}
-		Url.getURL(function(err, codes) {
-			if(codes.length == 0) Url.create({code: "aaaaaa"}).exec(function(err, idx) {
+	
+		Users.getURL(function(err, names) {
+
+			if(names.length == 0) 
 				Users.create( {name: "aaaaaa"}).exec(function created(err,idx){
 	   		
 	   	  			if(err) return next(err);
@@ -131,32 +135,35 @@ module.exports = {
       
 	      			return res.ok(req.baseUrl + "/users/aaaaaa");
 				});
-			});
 			else {
+
 				var url = (function(){
+
 					var dicc = "abcdefghijkmnlopqrstuvwxyzABCDEFGHIJKMNLOPQRSTUVWXYZ0123456789",
-					url_test = codes[0].code;
+						url_test = names[0].name;
+					
 					for (var i = url_test.length - 1; i >= 0; i--) {
+					
 						if(url_test[i] == dicc[dicc.length-1]){
+					
 							url_test = url_test.replaceAt(i, dicc[0]);
 						}else{
+							
 							url_test = url_test.replaceAt(i, dicc[dicc.indexOf(url_test[i])+1]);
-							console.log("New url: " + url_test);
 							break;
 						}
 					}
+
 					return url_test;
 				})();
-				Url.create({code: url}).exec(function(err, idx) {
-					Users.create( {name: url}).exec(function created(err,idx){
-	   		
-	   	  				if(err) return next(err);
 
-	      				res.status(201);
-      
-	      				return res.ok( req.baseUrl + "/users/" + url);
+				Users.create( {name: url}).exec(function created(err,idx){
+   		
+   	  				if(err) return next(err);
 
-					});
+      				res.status(201);
+  
+      				return res.ok( req.baseUrl + "/users/" + url);
 				});
 			}
 		});

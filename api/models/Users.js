@@ -37,7 +37,15 @@ module.exports = {
 				defaultsTo: 0
 		} 
 
-	}
+	},
+  
+  	getURL: function(callback) {
+
+	  	Users.find().sort("id DESC").exec(function(err, names) {
+
+	  		callback(err, names);
+
+  		});
+  	}
 
 };
-
