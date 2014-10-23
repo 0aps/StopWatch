@@ -129,7 +129,7 @@ module.exports = {
 
 	      			res.status(201);
       
-	      			return res.ok( "localhost:1337/users/aaaaaa");
+	      			return res.ok(req.baseUrl + "/users/aaaaaa");
 				});
 			});
 			else {
@@ -154,7 +154,7 @@ module.exports = {
 
 	      				res.status(201);
       
-	      				return res.ok( "localhost:1337/users/"+url);
+	      				return res.ok( req.baseUrl + "/users/" + url);
 
 					});
 				});
