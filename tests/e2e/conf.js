@@ -25,10 +25,10 @@ exports.config = {
   // to the location of this config. If no other method of starting Selenium
   // Server is found, this will default to
   // node_modules/protractor/selenium/selenium-server...
-  seleniumServerJar: null,
+  //seleniumServerJar: null,
   // The port to start the Selenium Server on, or null if the server should
   // find its own unused port. Ignored if seleniumServerJar is null.
-  seleniumPort: null,
+  //seleniumPort: null,
   // Additional command line options to pass to selenium. For example,
   // if you need to change the browser timeout, use
   // seleniumArgs: ['-browserTimeout=60']
@@ -38,13 +38,13 @@ exports.config = {
   // This will be passed to the Selenium jar as the system property
   // webdriver.chrome.driver. If null, Selenium will
   // attempt to find ChromeDriver using PATH.
-  chromeDriver: './selenium/chromedriver',
+  //chromeDriver: './selenium/chromedriver',
 
   // ---- 2. To connect to a Selenium Server which is already running ----------
   // The address of a running Selenium Server. If specified, Protractor will
   // connect to an already running instance of Selenium. This usually looks like
   // seleniumAddress: 'http://localhost:4444/wd/hub'
-  seleniumAddress: null,
+  //seleniumAddress: null,
 
   // ---- 3. To use remote browsers via Sauce Labs -----------------------------
   // If sauceUser and sauceKey are specified, seleniumServerJar will be ignored.
@@ -122,10 +122,10 @@ exports.config = {
     maxInstances: 1,
 
     // Additional spec files to be run on this capability only.
-    specs: ['spec/chromeOnlySpec.js'],
+    //specs: ['spec/chromeOnlySpec.js'],
 
     // Spec files to be excluded on this capability only.
-    exclude: ['spec/doNotRunInChromeSpec.js']
+    //exclude: ['spec/doNotRunInChromeSpec.js']
 
   },
 
@@ -145,11 +145,11 @@ exports.config = {
   //
   // A base URL for your application under test. Calls to protractor.get()
   // with relative paths will be prepended with this.
-  baseUrl: 'http://localhost:9876',
+  //baseUrl: 'http://localhost:9876',
 
   // CSS Selector for the element housing the angular app - this defaults to
   // body, but is necessary if ng-app is on a descendant of <body>.
-  rootElement: 'body',
+  //rootElement: 'body',
 
   // The timeout in milliseconds for each script run on the browser. This should
   // be longer than the maximum time your application needs to stabilize between
@@ -205,12 +205,12 @@ exports.config = {
   // object and can contain anything you may need in your test.
   // This can be changed via the command line as:
   //   --params.login.user 'Joe'
-  params: {
+  /*params: {
     login: {
       user: 'Jane',
       password: '1234'
     }
-  },
+  },*/
 
   // ---------------------------------------------------------------------------
   // ----- The test framework --------------------------------------------------
@@ -221,7 +221,7 @@ exports.config = {
   // Jasmine is fully supported as a test and assertion framework.
   // Mocha and Cucumber have limited beta support. You will need to include your
   // own assertion framework (such as Chai) if working with Mocha.
-  framework: 'jasmine',
+  //framework: 'jasmine',
 
   // Options to be passed to minijasminenode.
   //
